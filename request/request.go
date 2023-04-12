@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func Request(method string, url string, header map[string][]string, data string) (bodyText []byte) {
+func Request(method string, url string, header map[string][]string, data string) (statusCode int, bodyText []byte) {
 	client := &http.Client{}
 	var body = strings.NewReader(data)
 	req, err := http.NewRequest(method, url, body)
@@ -20,6 +20,7 @@ func Request(method string, url string, header map[string][]string, data string)
 		log.Fatal(err)
 	}
 	defer resp.Body.Close()
+	statusCode = resp.StatusCode
 	bodyText, err = ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Fatal(err)
